@@ -1,8 +1,9 @@
 {
-  "name": "gulp-sharp-test",
+  "name": "gulp-sharp-minimal",
   "version": "0.0.1",
-  "description": "simple sharp for gulp",
-  "author": "Pupil Labs",
+  "description": "minimal sharp plugin for gulp",
+  "author": "Will Patera <will@pupil-labs.com>",
+  "contributors": ["Nathakit Sae-Tan"],
   "license": "MIT",
   "devDependencies": {
     "gulp-plumber": "^1.1.0",
