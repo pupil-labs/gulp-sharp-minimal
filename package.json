@@ -1,0 +1,14 @@
+{
+  "name": "gulp-sharp-test",
+  "version": "0.0.1",
+  "description": "simple sharp for gulp",
+  "author": "Pupil Labs",
+  "license": "MIT",
+  "devDependencies": {
+    "gulp-plumber": "^1.1.0",
+    "gulp-util": "^3.0.7",
+    "node-gyp": "^3.4.0",
+    "sharp": "^0.15.1",
+    "through2": "^2.0.1"
+  }
+}
