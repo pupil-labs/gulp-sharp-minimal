@@ -32,33 +32,33 @@ module.exports = function(options){
             .compressionLevel((!options.compressionLevel ? 6 : options.compressionLevel))
             .toBuffer()
         })
-          .then(function(data){
-            if (options.progressive){
-              image.progressive()
-            } 
+        .then(function(data){
+          if (options.progressive){
+            image.progressive()
+          } 
 
-            if (options.stripMetadata){
-              // if true - then we keep all EXIF data of image
-              // otherwise default behavior is to strip it all
-              image.withMetadata();
-            }
-            return image;
-          })
+          if (options.stripMetadata){
+            // if true - then we keep all EXIF data of image
+            // otherwise default behavior is to strip it all
+            image.withMetadata();
+          }
+          return image;
+        })
 
-          .then(function(sequentialRead){
-            if (options.sequentialRead){
-              image.sequentialRead()
-            }
-            return image;
+        .then(function(sequentialRead){
+          if (options.sequentialRead){
+            image.sequentialRead()
+          }
+          return image;
 
-           })
+         })
 
-          .then(function(trellisQuantisation){
-            if (options.trellisQuantisation){
-              image.trellisQuantisation()
-            }
-            return image;
-          });
+        .then(function(trellisQuantisation){
+          if (options.trellisQuantisation){
+            image.trellisQuantisation()
+          }
+          return image;
+        });
 
       // simple method for replacing file names with new format suffix
       var path = file.path;

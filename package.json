@@ -3,10 +3,17 @@
   "version": "0.0.1",
   "description": "minimal sharp plugin for gulp",
   "author": "Will Patera <will@pupil-labs.com>",
-  "contributors": ["Nathakit Sae-Tan"],
+  "contributors": [
+    "Nathakit Sae-Tan"
+  ],
   "license": "MIT",
+  "dependencies": {
+    "gulp-util": "^3.0.7",
+    "node-gyp": "^3.4.0",
+    "sharp": "^0.15.1",
+    "through2": "^2.0.1"
+  },
   "devDependencies": {
-    "gulp-plumber": "^1.1.0",
     "gulp-util": "^3.0.7",
     "node-gyp": "^3.4.0",
     "sharp": "^0.15.1",
