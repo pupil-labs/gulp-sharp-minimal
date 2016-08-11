@@ -5,7 +5,7 @@ var PluginError = require('gulp-util').PluginError;
 var sharp = require('sharp');
 var through = require('through2');
 
-var PLUGIN_NAME = 'gulp-sharp-test';
+var PLUGIN_NAME = 'gulp-sharp-minimal';
 
 module.exports = function(options){
   return through.obj(function(file, encoding, callback) {
@@ -17,6 +17,10 @@ module.exports = function(options){
       this.emit('error', new PluginError(PLUGIN_NAME, "You need to pass options to this plugin. See docs..."));
     }
 
+    if (!options.resize) {
+      this.emit('error', new PluginError(PLUGIN_NAME, "You must pass resize as an option and it must be an array with 2 values w,h."));
+    }
+
     if (file.isStream()) {
       this.emit('error', new PluginError(PLUGIN_NAME, "Received a stream... Streams are not supported. Sorry ;("));
     } else if (file.isBuffer()) {
@@ -26,8 +30,8 @@ module.exports = function(options){
         .metadata()
         .then(function(metadata){
           return image
-            .resize((!options.resize ? (metadata.width,metadata.height) : options.resize.constructor === Array ? (options.resize[0],options.resize[1]) : (Math.round(metadata.width*options.resize),Math.round(metadata.height*options.resize))  ))
-            .max() 
+            .resize(...options.resize)
+            .min()
             .withoutEnlargement()
             .toFormat((!options.format ? metadata.format : options.format))
             .quality((!options.quality ? 80 : options.quality))
