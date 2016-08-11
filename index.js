@@ -18,15 +18,17 @@ module.exports = function(options){
     }
 
     if (file.isStream()) {
-      this.emit('error', new PluginError(PLUGIN_NAME, "Received a stream..."));
+      this.emit('error', new PluginError(PLUGIN_NAME, "Received a stream... Streams are not supported. Sorry ;("));
     } else if (file.isBuffer()) {
       // this.emit('error', new PluginError(PLUGIN_NAME, "Received a buffer..."));
+      console.log("options.resize: "+options.resize);
       var image = sharp(file.contents);
       image
         .metadata()
         .then(function(metadata){
           return image
-            .resize((!options.resize ? metadata.width : Math.round(metadata.width * options.resize)))
+            .resize((!options.resize ? (metadata.width,metadata.height) : options.resize.constructor === Array ? (options.resize[0],options.resize[1]) : (Math.round(metadata.width*options.resize),Math.round(metadata.height*options.resize))  ))
+            .max() 
             .toFormat((!options.format ? metadata.format : options.format))
             .quality((!options.quality ? 80 : options.quality))
             .compressionLevel((!options.compressionLevel ? 6 : options.compressionLevel))
