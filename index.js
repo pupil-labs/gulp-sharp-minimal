@@ -31,7 +31,7 @@ module.exports = function(options){
         .then(function(metadata){
           return image
             .resize(...options.resize)
-            .min()
+            .max()
             .withoutEnlargement()
             .toFormat((!options.format ? metadata.format : options.format))
             .quality((!options.quality ? 80 : options.quality))
