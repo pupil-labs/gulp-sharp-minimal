@@ -6,23 +6,27 @@ var sharp = require('sharp');
 const PLUGIN_NAME = 'gulp-sharp-minimal';
 
 
-module.exports = function(options){
-  return through.obj(function(file, encoding, callback) {
+function gulpSharpMinimal(options){
+  if (!options){
+      this.emit('error', new PluginError(PLUGIN_NAME, "You need to pass options to this plugin. See docs..."));
+    }
+
+  if (!options.resize) {
+    this.emit('error', new PluginError(PLUGIN_NAME, "You must pass resize as an option and it must be an array with 2 values w,h."));
+  }
+
+
+  var stream = through.obj(function(file, encoding, callback) {
     if (file.isNull()) {
       return callback(null, file);
     }
 
-    if (!options){
-      this.emit('error', new PluginError(PLUGIN_NAME, "You need to pass options to this plugin. See docs..."));
-    }
-
-    if (!options.resize) {
-      this.emit('error', new PluginError(PLUGIN_NAME, "You must pass resize as an option and it must be an array with 2 values w,h."));
-    }
-
     if (file.isStream()) {
       this.emit('error', new PluginError(PLUGIN_NAME, "Received a stream... Streams are not supported. Sorry ;("));
-    } else if (file.isBuffer()) {
+      return callback();
+    }
+
+    if (file.isBuffer()) {
       // this.emit('error', new PluginError(PLUGIN_NAME, "Received a buffer..."));
       var image = sharp(file.contents);
       image
@@ -75,8 +79,16 @@ module.exports = function(options){
 
       file.path = path
       file.contents = image;
-      callback(null,file);
+      
+      return callback(null, file);
     }
-  });
 
+    // make sure the file goes through the next gulp plugin
+    this.push(file);
+    callback();
+  });
+  // returning the file sream through2
+  return stream
 };
+
+module.exports = gulpSharpMinimal;
