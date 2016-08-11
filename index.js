@@ -21,7 +21,6 @@ module.exports = function(options){
       this.emit('error', new PluginError(PLUGIN_NAME, "Received a stream... Streams are not supported. Sorry ;("));
     } else if (file.isBuffer()) {
       // this.emit('error', new PluginError(PLUGIN_NAME, "Received a buffer..."));
-      console.log("options.resize: "+options.resize);
       var image = sharp(file.contents);
       image
         .metadata()
