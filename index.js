@@ -27,7 +27,7 @@ module.exports = function(options){
         .then(function(metadata){
           return image
             .resize((!options.resize ? (metadata.width,metadata.height) : options.resize.constructor === Array ? (options.resize[0],options.resize[1]) : (Math.round(metadata.width*options.resize),Math.round(metadata.height*options.resize))  ))
-            .min() 
+            .max() 
             .withoutEnlargement()
             .toFormat((!options.format ? metadata.format : options.format))
             .quality((!options.quality ? 80 : options.quality))
