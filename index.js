@@ -1,11 +1,10 @@
 'use strict';
-
-var Transform = require('readable-stream/transform');
+var through = require('through2');
 var PluginError = require('gulp-util').PluginError;
 var sharp = require('sharp');
-var through = require('through2');
 
-var PLUGIN_NAME = 'gulp-sharp-minimal';
+const PLUGIN_NAME = 'gulp-sharp-minimal';
+
 
 module.exports = function(options){
   return through.obj(function(file, encoding, callback) {
@@ -76,7 +75,7 @@ module.exports = function(options){
 
       file.path = path
       file.contents = image;
-      return callback(null, file);
+      callback(null,file);
     }
   });
 
