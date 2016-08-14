@@ -1,0 +1,17 @@
+{
+  "name": "gulp-sharp-minimal-example",
+  "version": "0.0.0",
+  "description": "An example that demonstrates minimal sharp plugin for gulp",
+  "main": "gulpfile.js",
+  "author": "Will Patera <will@pupil-labs.com>",
+  "contributors": [
+    "Nathakit Sae-Tan"
+  ],
+  "license": "MIT",
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "gulp-plumber": "^1.1.0",
+    "gulp-size": "^2.1.0",
+    "gulp-util": "^3.0.7"
+  }
+}

@@ -7,7 +7,6 @@ var sharp = require('sharp');
 const PLUGIN_NAME = 'gulp-sharp-minimal';
 
 function gulpSharpMinimal(options){
-  var stats = {img_count:0,size_before:0,size_after:0};
 
   return through.obj(function(file, encoding, callback) {
     
@@ -33,8 +32,7 @@ function gulpSharpMinimal(options){
     if (file.isBuffer()) {
       // this.emit('error', new gutil.PluginError(PLUGIN_NAME, "Received a buffer..."));
       var image = sharp(file.contents);
-      var file_size_before = getFileSize(file.stat.size);
-      stats.size_before += file_size_before;
+      var file_size_before = getFileSize(Buffer.byteLength(String(file.contents)));
 
       image
         .metadata()
@@ -84,13 +82,11 @@ function gulpSharpMinimal(options){
             path: file.path,
             contents: image
           });
-          var file_size_after = getFileSize(newFile.stat.size);
-          stats.size_after += file_size_after;
-          stats.img_count += 1;
-          gutil.log(PLUGIN_NAME + ':', gutil.colors.green(newFile.relative + " : size before: "+file_size_before+" : size_after: "+file_size_after));
+          var file_size_after = getFileSize(Buffer.byteLength(String(newFile.contents)));
+          gutil.log(PLUGIN_NAME + ':', gutil.colors.green(newFile.relative + " : size before: "+file_size_before+" : size after: "+file_size_after));
           callback(null, newFile);
       });
-    }
+    }  
   });
 
 }
