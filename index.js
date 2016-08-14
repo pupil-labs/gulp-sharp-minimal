@@ -1,32 +1,34 @@
 'use strict';
 var through = require('through2');
-var PluginError = require('gulp-util').PluginError;
+var gutil = require('gulp-util');
 var sharp = require('sharp');
 
 const PLUGIN_NAME = 'gulp-sharp-minimal';
 
-
-
-
-
-module.exports = function(options){
+function gulpSharpMinimal(options){
   return through.obj(function(file, encoding, callback) {
+    
+
     if (file.isNull()) {
-      return callback(null, file);
+      this.push(file)
+      return callback();
     }
 
     if (!options){
-      this.emit('error', new PluginError(PLUGIN_NAME, "You need to pass options to this plugin. See docs..."));
+      this.emit('error', new gutil.PluginError(PLUGIN_NAME, "You need to pass options to this plugin. See docs..."));
     }
 
     if (!options.resize) {
-      this.emit('error', new PluginError(PLUGIN_NAME, "You must pass resize as an option and it must be an array with 2 values w,h."));
+      this.emit('error', new gutil.PluginError(PLUGIN_NAME, "You must pass resize as an option and it must be an array with 2 values w,h."));
     }
 
     if (file.isStream()) {
-      this.emit('error', new PluginError(PLUGIN_NAME, "Received a stream... Streams are not supported. Sorry ;("));
-    } else if (file.isBuffer()) {
-      // this.emit('error', new PluginError(PLUGIN_NAME, "Received a buffer..."));
+      this.emit('error', new gutil.PluginError(PLUGIN_NAME, "Received a stream... Streams are not supported. Sorry."));
+      return callback();
+    }
+
+    if (file.isBuffer()) {
+      // this.emit('error', new gutil.PluginError(PLUGIN_NAME, "Received a buffer..."));
       var image = sharp(file.contents);
       image
         .metadata()
@@ -68,18 +70,25 @@ module.exports = function(options){
           return image;
         });
 
-      // simple method for replacing file names with new format suffix
-      var path = file.path;
-      if (options.format){
-        var split_path = file.path.split('.');
-        split_path[split_path.length-1] = options.format;
-        path = split_path.join('.');
-      } 
 
-      file.path = path
-      file.contents = image;
-      return callback(null, file);
+      image.toBuffer(function(err, buf) {
+        if (err) {
+          return callback(new gutil.PluginError(PLUGIN_NAME, err, {showStack: true}));
+        }
+
+        var newFile = new gutil.File({
+          cwd: file.cwd,
+          base: file.base,
+          path: file.path,
+          contents: buf
+        });
+
+        gutil.log(PLUGIN_NAME + ':', gutil.colors.green(file.relative + ' -> ' + newFile.relative));
+        callback(null, newFile);
+      });
     }
   });
 
-};
+}
+
+module.exports = gulpSharpMinimal;
