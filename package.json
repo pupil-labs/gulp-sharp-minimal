@@ -6,14 +6,17 @@
   "contributors": [
     "Nathakit Sae-Tan"
   ],
+  "repository": "pupil-labs/gulp-sharp-minimal",  
   "license": "MIT",
   "dependencies": {
+    "filesize": "^3.3.0",
     "gulp-util": "^3.0.7",
     "node-gyp": "^3.4.0",
     "sharp": "^0.15.1",
     "through2": "^2.0.1"
   },
   "devDependencies": {
+    "filesize": "^3.3.0",
     "gulp-util": "^3.0.7",
     "node-gyp": "^3.4.0",
     "sharp": "^0.15.1",
