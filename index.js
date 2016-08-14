@@ -30,6 +30,7 @@ function gulpSharpMinimal(options){
     if (file.isBuffer()) {
       // this.emit('error', new gutil.PluginError(PLUGIN_NAME, "Received a buffer..."));
       var image = sharp(file.contents);
+      
       image
         .metadata()
         .then(function(metadata){
@@ -68,23 +69,19 @@ function gulpSharpMinimal(options){
             image.trellisQuantisation()
           }
           return image;
-        });
+        })
 
+        .then(function(data) {
 
-      image.toBuffer(function(err, buf) {
-        if (err) {
-          return callback(new gutil.PluginError(PLUGIN_NAME, err, {showStack: true}));
-        }
+          var newFile = new gutil.File({
+            cwd: file.cwd,
+            base: file.base,
+            path: file.path,
+            contents: image
+          });
 
-        var newFile = new gutil.File({
-          cwd: file.cwd,
-          base: file.base,
-          path: file.path,
-          contents: buf
-        });
-
-        gutil.log(PLUGIN_NAME + ':', gutil.colors.green(file.relative + ' -> ' + newFile.relative));
-        callback(null, newFile);
+          gutil.log(PLUGIN_NAME + ':', gutil.colors.green(file.relative + ' -> ' + newFile.relative));
+          callback(null, newFile);
       });
     }
   });
